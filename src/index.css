@@ -20,3 +20,27 @@ body * {
 #root{
   height: 100%;
 }
+
+.nyamushki{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 100%;
+}
+
+.nyamushki__title{
+  font-size: 36px;
+  letter-spacing: 0;
+  text-shadow: 0 1px 1px #000000;
+  margin-bottom: 26px;
+  color: #ffffff;
+}
+
+.nyamushki__list {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  max-width: 100%;
+}

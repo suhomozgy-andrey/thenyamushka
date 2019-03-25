@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import './App.scss';
 import { Nyamushka } from './components';
+import { immutableRowUpdateById } from './helpers';
 
 const data = [
   {
@@ -35,20 +35,6 @@ const data = [
     underTextSelected: 'Головы щучьи с чесноком да свежайшая семгушка.',
   },
 ]
-
-const immutableRowUpdateById = (arr, id) => {
-  const index = arr.findIndex(item => item.id === id);
-  const row = arr[index];
-  const { selected } = row;
-
-  row.selected = !selected;
-
-  return [
-    ...arr.slice(0, index),
-    row,
-    ...arr.slice(index + 1)
-  ];
-}
 
 class App extends Component {
   constructor(props) {
