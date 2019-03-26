@@ -227,6 +227,13 @@ const StyledNyamushka = styled.div`
     margin-right: 80px;
   }
 
+  @media (max-width: 860px) {
+    margin-right: 0;
+    &:not(:last-child) {
+      margin-right: 0px;
+    }
+  }
+
   ${StyledNyamushkaPack} {
     border-color: ${props => packsColors[props.color].normal};
     &::after {
