@@ -21,27 +21,28 @@ class Nyamushka extends Component {
     const { selected } = this.props;
     this.setState({
       hovered: true,
-      hoverable: (clicked > 0 && leavesCount > 0) || selected
+      hoverable: selected ? leavesCount > 0 : clicked > 0,
     })
   }
 
   handleSelect() {
     const { clicked, leavesCount } = this.state;
-    const { id, available, onPackSelect } = this.props;
+    const { id, available, onPackSelect, selected } = this.props;
     if (!available) return false;
     this.setState({
       clicked: clicked + 1,
-      hoverable: (clicked > 0 && leavesCount > 0),
-      leavesCount: 0
+      hoverable: selected ? false : clicked > 0 && leavesCount > 0,
+      leavesCount: 0,
     })
     onPackSelect(id);
   }
 
   handleMouseLeave() {
     const { leavesCount } = this.state;
+    const { selected } = this.props;
     this.setState({
       hovered: false,
-      leavesCount: leavesCount + 1,
+      leavesCount: selected ? leavesCount + 1 : 0,
     })
   }
 
