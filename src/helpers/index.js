@@ -3,18 +3,23 @@ function nyamushkaBorder(fill) {
 };
 
 const packsColors = {
-  rose: {
-    normal: '#D91667',
-    hovered: '#E52E7A',
+  pallete: {
+    rose: {
+      normal: '#D91667',
+      hovered: '#E52E7A',
+    },
+    blue: {
+      normal: '#1698D9',
+      hovered: '#2EA8E6',
+    },
+    grey: {
+      normal: '#B3B3B3',
+      hovered: '#B3B3B3',
+    },
   },
-  blue: {
-    normal: '#1698D9',
-    hovered: '#2EA8E6',
-  },
-  grey: {
-    normal: '#B3B3B3',
-    hovered: '#B3B3B3',
-  },
+  selected: 'rose',
+  disabled: 'grey',
+  default: 'blue',
 }
 
 const immutableRowUpdateById = (arr, id) => {

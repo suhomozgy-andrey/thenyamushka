@@ -5,18 +5,31 @@ html{
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  font-family: 'Helvetica', 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: #282c34;
   height: 100%;
   background-image: url("./Pattern@2x.png");
   background-position: center;
+  background-size: 100%;
 }
 
 body * {
   box-sizing: border-box;
 }
+
+body::before {
+  background: linear-gradient(rgba(0,0,0,0.5), transparent, rgba(0,0,0,0.5));
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  display: block;
+  content: '';
+}
+
 
 #root{
   height: 100%;
@@ -29,6 +42,8 @@ body * {
   flex-direction: column;
   min-height: 100%;
   padding: 30px;
+  position: relative;
+  z-index: 1;
 }
 
 .nyamushki__title{
@@ -54,9 +69,5 @@ body * {
     align-items: center;
     flex-wrap: wrap;
     justify-content: flex-start;
-  }
-
-  .nyamushki__list > div {
-    margin-right: 0;
   }
 }

@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import styled from 'styled-components';
-import { nyamushkaBorder, packsColors } from '../../helpers';
+import pluralize from 'pluralize-ru';
+import { packsColors } from '../../helpers';
 import catBg from '../../cat.png';
 
 class Nyamushka extends Component {
@@ -61,8 +62,8 @@ class Nyamushka extends Component {
 
   render() {
     const { hovered, hoverable } = this.state;
-    const { with: withProduct, selected, portions, present, weight, weightPostfix, underText, available } = this.props;
-    const color = selected ? 'rose' : (!available ? 'grey' : 'blue');
+    const { with: withProduct, selected, portions, presentCount, presentText, weight, weightPostfix, underText, available } = this.props;
+    const color = selected ? packsColors.selected : (!available ? packsColors.disabled : packsColors.default);
     return (
       <StyledNyamushka
         className={`${!available ? ' disabled' : ''}${hoverable ? ' hoverable' : ''}`}
@@ -71,21 +72,34 @@ class Nyamushka extends Component {
         color={color}
       >
         <StyledNyamushkaPack onClick={() => this.handleSelect()}>
-          <StyledNyamushkaPackInner>
-            <StyledNyamushkaPackInnerContent>
-              <StyledNyamushkaPackCat src={catBg} alt={`Нямушка ${withProduct}`} />
-              <StyledNyamushkaPackInnerContentText>
-                <StyledNyamushkaPackHead color={hoverable && selected && hovered ? 'rose' : undefined}>
-                  {hoverable && selected && hovered ? 'Котэ не одобряет?' : 'Сказочное заморское яство'}
-                </StyledNyamushkaPackHead>
-                <StyledNyamushkaPackTitle><strong>Нямушка</strong></StyledNyamushkaPackTitle>
-                <StyledNyamushkaPackСonsist><strong>{withProduct}</strong></StyledNyamushkaPackСonsist>
-                <StyledNyamushkaPackPortions>{portions} порций</StyledNyamushkaPackPortions>
-                <StyledNyamushkaPackPresent>{present}</StyledNyamushkaPackPresent>
-              </StyledNyamushkaPackInnerContentText>
-            </StyledNyamushkaPackInnerContent>
-            <StyledNyamushkaPackWeight>{weight} <span>{weightPostfix}</span></StyledNyamushkaPackWeight>
-          </StyledNyamushkaPackInner>
+          <StyledNyamushkaPackInnerContent>
+            <StyledNyamushkaPackCatBg><StyledNyamushkaPackCat src={catBg} alt={`Нямушка ${withProduct}`} /></StyledNyamushkaPackCatBg>
+            <StyledNyamushkaPackInnerContentText >
+              <StyledNyamushkaPackHead color={hoverable && selected && hovered ? packsColors.selected : undefined}>
+                {hoverable && selected && hovered ? 'Котэ не одобряет?' : 'Сказочное заморское яство'}
+              </StyledNyamushkaPackHead>
+              <StyledNyamushkaPackTitle>
+                <strong>Нямушка</strong>
+              </StyledNyamushkaPackTitle>
+              <StyledNyamushkaPackСonsist>
+                <strong>{withProduct}</strong>
+              </StyledNyamushkaPackСonsist>
+              <StyledNyamushkaPackPortions>
+                <strong>{portions}</strong> порций
+              </StyledNyamushkaPackPortions>
+              {presentCount && (
+                <StyledNyamushkaPackPresent>
+                  <strong>{presentCount}</strong> {pluralize(presentCount, '', 'мыш', 'мыши', 'мышей')} в подарок
+                   <br />
+                  {presentText}
+                </StyledNyamushkaPackPresent>
+              )}
+            </StyledNyamushkaPackInnerContentText>
+            <StyledNyamushkaPackWeight>
+              {weight} <span>{weightPostfix}</span>
+            </StyledNyamushkaPackWeight>
+          </StyledNyamushkaPackInnerContent>
+
         </StyledNyamushkaPack>
         <StyledNyamushkaUnderText>
           {!available ? (
@@ -103,7 +117,6 @@ class Nyamushka extends Component {
               </Fragment>
             )}
         </StyledNyamushkaUnderText>
-
       </StyledNyamushka>
     );
   }
@@ -111,31 +124,56 @@ class Nyamushka extends Component {
 
 const StyledNyamushkaPack = styled.div`
   height: 480px;
-  border-radius: 12px;
   margin-bottom: 10px;
-  background-repeat: no-repeat;
-  background-size: 122%;
-  background-position: -41px 206%;
-  cursor: pointer;
   position: relative;
   overflow: hidden;
-  &:after {
+  display: flex;
+  flex-direction: column;
+  &:after, &:before {
     content: '';
-    position: absolute;
-    left: 0;
+    background: #ffffff;
+    cursor: pointer;
+  }
+  &:before {
+    position: relative;
+    right: 0;
     top: 0;
-    height: 100%;
-    width: 100%;
-    transition: .2s background-image;
-    background-position: 0 0;
-    background-size: contain;
-    background-repeat: no-repeat;
+    width: calc(100% - 42px);
+    height: 40px;
+    align-self: flex-end;
+    border: 4px solid;
+    border-left: 0;
+    border-bottom: 0;
+    border-radius: 0 12px 0 0;
+    z-index: 3;
+  }
+  &:after {
+    position: absolute;
+    left: 12px;
+    top: 10px;
+    width: 55px;
+    height: 56px;
+    transform: rotate(-45deg) scale(1.9, 1.02);
+    z-index: 0;
+    border-radius: 15px;
+    border-top: 4px solid;
   }
 `;
 
 const StyledNyamushkaPackHead = styled.div`
-  color: ${props => props.color ? packsColors[props.color].hovered : '#666666'};
+  color: ${props => props.color ? packsColors.pallete[props.color].hovered : '#666666'};
   font-size: 16px;
+  margin-bottom: 3px;
+`;
+
+const StyledNyamushkaPackCatBg = styled.div`
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 8px;
 `;
 
 const StyledNyamushkaPackCat = styled.img`
@@ -147,7 +185,8 @@ const StyledNyamushkaPackCat = styled.img`
 
 
 const StyledNyamushkaPackInnerContentText = styled.div`
- padding: 20px 10px 20px 50px;
+ padding: 20px 10px 20px 00px;
+ margin-top: -36px;
 `;
 
 const StyledNyamushkaPackTitle = styled.div`
@@ -190,18 +229,19 @@ const StyledNyamushkaPackWeight = styled.div`
   }
 `;
 
-const StyledNyamushkaPackInner = styled.div`
-  border: 4px solid transparent;
-  height: 100%;
-  overflow: hidden;
-  border-radius: 12px;
-`;
-
 const StyledNyamushkaPackInnerContent = styled.div`
   position: relative;
-  z-index: 2;
+  z-index: 4;
   width: 100%;
   height: 100%;
+  flex: 1;
+  border: 4px solid;
+  border-top: 0;
+  background: #ffffff;
+  margin-top: -6px;
+  border-radius: 0 0 12px 12px;
+  cursor: pointer;
+  padding-left: 50px;
 `;
 
 const StyledNyamushkaUnderText = styled.div`
@@ -220,45 +260,39 @@ const StyledNyamushkaUnderTextAction = styled.span`
 
 const StyledNyamushka = styled.div`
   width: 320px;
-  height: 509px;
   margin-bottom: 30px;
   max-width: 100%;
-  &:not(:last-child) {
-    margin-right: 80px;
-  }
+  margin: 0 40px 40px;
+  font-family: 'Trebuchet MS';
 
-  @media (max-width: 860px) {
+  @media (max-width: 500px) {
+    margin-left: 0;
     margin-right: 0;
-    &:not(:last-child) {
-      margin-right: 0px;
-    }
   }
 
   ${StyledNyamushkaPack} {
-    border-color: ${props => packsColors[props.color].normal};
-    &::after {
-      background-image: url("${props => nyamushkaBorder(packsColors[props.color].normal)}");
+    ${StyledNyamushkaPackInnerContent}, &:before,  &:after{
+      border-color: ${props => packsColors.pallete[props.color].normal};
     }
   }
   ${StyledNyamushkaPackWeight}{
-    background-color: ${props => packsColors[props.color].normal};
+    background-color: ${props => packsColors.pallete[props.color].normal};
   }
   ${StyledNyamushkaUnderTextAction}{
-      color:  ${props => packsColors[props.color].normal};
+    color:  ${props => packsColors.pallete[props.color].normal};
   }
 
   &.hoverable:hover {
     ${StyledNyamushkaPack} {
-      border-color: ${props => packsColors[props.color].hovered};
-      &:after {
-        background-image: url("${props => nyamushkaBorder(packsColors[props.color].hovered)}");
+      ${StyledNyamushkaPackInnerContent}, &:before, &:after{
+        border-color: ${props => packsColors.pallete[props.color].hovered};
       }
     }
     ${StyledNyamushkaPackWeight}{
-      background: ${ props => packsColors[props.color].hovered};
+      background-color: ${ props => packsColors.pallete[props.color].hovered};
     }
     ${StyledNyamushkaUnderTextAction}{
-      color: ${ props => packsColors[props.color].hovered};
+      color: ${ props => packsColors.pallete[props.color].hovered};
     }
   }
   &.disabled{

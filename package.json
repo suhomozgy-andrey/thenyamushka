@@ -4,6 +4,8 @@
   "private": true,
   "dependencies": {
     "node-sass": "^4.11.0",
+    "pluralize": "^7.0.0",
+    "pluralize-ru": "^1.0.1",
     "react": "^16.8.5",
     "react-dom": "^16.8.5",
     "react-scripts": "2.1.8",
