@@ -7,29 +7,13 @@ import catBg from '../../cat.png';
 class Nyamushka extends Component {
   constructor(props) {
     super(props);
-
+    const { selected } = props;
     this.state = {
       hovered: false,
       clicked: 0,
-      hoverable: false,
+      hoverable: selected,
       leavesCount: 0,
     }
-  }
-
-  componentWillMount() {
-    const { selected } = this.props;
-
-    this.setState({
-      hoverable: selected
-    })
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const { selected } = nextProps;
-    const { leavesCount, clicked } = this.state;
-    this.setState({
-      hoverable: (clicked > 0 && leavesCount > 0) && !selected
-    })
   }
 
   handleMouseOver() {
@@ -42,12 +26,13 @@ class Nyamushka extends Component {
   }
 
   handleSelect() {
-    const { clicked, hoverable } = this.state;
-    const { id, available, selected, onPackSelect } = this.props;
+    const { clicked, leavesCount } = this.state;
+    const { id, available, onPackSelect } = this.props;
     if (!available) return false;
     this.setState({
       clicked: clicked + 1,
-      hoverable: selected ? false : hoverable,
+      hoverable: (clicked > 0 && leavesCount > 0),
+      leavesCount: 0
     })
     onPackSelect(id);
   }
